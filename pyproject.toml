@@ -35,3 +35,4 @@ packages = ["freakyfunkyfonts"]
 [project.urls]
 Homepage = "https://github.com/Naitsabot/django-freakyfunkyfonts"
 Source = "https://github.com/Naitsabot/django-freakyfunkyfonts"
+Issues = "https://github.com/Naitsabot/django-freakyfunkyfonts/issues"
