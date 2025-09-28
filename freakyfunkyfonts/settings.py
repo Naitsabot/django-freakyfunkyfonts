@@ -14,7 +14,7 @@ DEFAULTS = {
 }
 
 def load_config():
-    path = os.path.join(os.getcwd(), "funkyfonts.toml")
+    path = os.path.join(os.getcwd(), "freakyfunkyfonts.toml")
     config = DEFAULTS.copy()
     if os.path.exists(path):
         with open(path, "rb") as f:
