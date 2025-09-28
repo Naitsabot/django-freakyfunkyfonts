@@ -18,7 +18,7 @@ It intercespts the html of Djangos reponses
 ### Installing
 
 ```bash
-
+pip install django-freakyfunkyfonts
 ```
 
 ### Applying
@@ -28,7 +28,7 @@ In the project settings
 ```py
 MIDDLEWARE = [
     # ...
-    "freakyfunkyfonts.middleware.FunkyFontMiddleware",
+    "freakyfunkyfonts.middleware.FreakyFunkyFontsMiddleware",
 ]
 ```
 
