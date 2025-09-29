@@ -9,7 +9,7 @@ DEFAULTS = {
         "google_fonts_link": None,
     },
     "behaviour": {
-        "skip_tags": ["script", "style", "noscript", "title"],
+        "skip_tags": ['head', 'title', 'meta', 'link', 'style', 'script'],
         "scope": ["body", "main", "article"]
     },
 }

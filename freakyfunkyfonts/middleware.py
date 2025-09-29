@@ -16,13 +16,14 @@ class FreakyFunkyFontsMiddleware:
         if "text/html" not in content_type:
             return response
 
-        soup = BeautifulSoup(response.content, "html.parser")
+        # Use 'html.parser' with original encoding
+        original_content = response.content.decode(response.charset or 'utf-8')
+        soup = BeautifulSoup(original_content, "html.parser")
 
         # Inject extra tags if configured
         inject_tags = self.config["inject"].get("tags", [])
         if soup.head and inject_tags:
             for tag_html in inject_tags:
-                # don’t duplicate if already present
                 if not soup.head.find(lambda t: str(t) == tag_html):
                     soup.head.append(BeautifulSoup(tag_html, "html.parser"))
 
@@ -53,6 +54,7 @@ class FreakyFunkyFontsMiddleware:
                 )
                 text_node.replace_with(BeautifulSoup(new_html, "html.parser"))
 
-        response.content = str(soup)
+        # Use decode() to preserve structure better than str()
+        response.content = soup.encode(formatter="minimal").decode('utf-8')
         response["Content-Length"] = len(response.content)
         return response

@@ -59,7 +59,7 @@ tags = [
 scopes = ["body", "article", "main"]
 
 # HTML tags to skip completely
-skip_tags = ["script", "style", "noscript", "title"]
+skip_tags = ['head', 'title', 'meta', 'link', 'style', 'script'] 
 ```
 
 ## Dev
