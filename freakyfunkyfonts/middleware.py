@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 import random
 from .settings import load_config
 
@@ -16,7 +16,6 @@ class FreakyFunkyFontsMiddleware:
         if "text/html" not in content_type:
             return response
 
-        # Use 'html.parser' with original encoding
         original_content = response.content.decode(response.charset or 'utf-8')
         soup = BeautifulSoup(original_content, "html.parser")
 
@@ -24,8 +23,10 @@ class FreakyFunkyFontsMiddleware:
         inject_tags = self.config["inject"].get("tags", [])
         if soup.head and inject_tags:
             for tag_html in inject_tags:
-                if not soup.head.find(lambda t: str(t) == tag_html):
-                    soup.head.append(BeautifulSoup(tag_html, "html.parser"))
+                if tag_html not in str(soup.head):
+                    tag_soup = BeautifulSoup(tag_html, "html.parser")
+                    for tag in tag_soup:
+                        soup.head.append(tag)
 
         skip_tags = set(self.config["behaviour"]["skip_tags"])
         fonts = self.config["fonts"]["pool"]
@@ -34,7 +35,7 @@ class FreakyFunkyFontsMiddleware:
         # Determine roots to operate on
         roots = []
         if "all" in scopes:
-            roots = [soup]
+            roots = [soup.body] if soup.body else [soup]
         else:
             for scope in scopes:
                 if scope == "body" and soup.body:
@@ -42,19 +43,44 @@ class FreakyFunkyFontsMiddleware:
                 else:
                     roots.extend(soup.find_all(scope))
 
-        # Walk through text nodes under those roots
+        # Process text nodes
         for root in roots:
-            for text_node in root.find_all(string=True):
-                if text_node.parent.name in skip_tags:
-                    continue
-                new_html = "".join(
-                    f'<span style="font-family:{random.choice(fonts)}">{c}</span>'
-                    if c.strip() else c
-                    for c in text_node
-                )
-                text_node.replace_with(BeautifulSoup(new_html, "html.parser"))
+            self._process_element(root, skip_tags, fonts)
 
-        # Use decode() to preserve structure better than str()
-        response.content = soup.encode(formatter="minimal").decode('utf-8')
+        # Use decode() with formatter to preserve structure
+        response.content = soup.encode(formatter="minimal")
         response["Content-Length"] = len(response.content)
         return response
+
+    def _process_element(self, element, skip_tags, fonts):
+        """Recursively process element and its children"""
+        # Skip if this tag should be ignored
+        if hasattr(element, 'name') and element.name in skip_tags:
+            return
+
+        # Get children as a list since we'll be modifying during iteration
+        children = list(element.children) if hasattr(element, 'children') else []
+        
+        for child in children:
+            if isinstance(child, NavigableString) and not isinstance(child, type(child).__bases__[0]):
+                # This is a plain text node
+                if str(child).strip():  # Has non-whitespace content
+                    new_elements = []
+                    for c in str(child):
+                        if c.strip():  # Character is not whitespace
+                            font = random.choice(fonts)
+                            span = element.find_parent().new_tag("span") if element.find_parent() else BeautifulSoup().new_tag("span")
+                            span['style'] = f"font-family:{font}"
+                            span.string = c
+                            new_elements.append(span)
+                        else:
+                            # Preserve whitespace
+                            new_elements.append(NavigableString(c))
+                    
+                    # Replace text with spans
+                    for new_el in reversed(new_elements):
+                        child.insert_after(new_el)
+                    child.extract()
+            elif hasattr(child, 'name'):
+                # Recurse into child tags
+                self._process_element(child, skip_tags, fonts)
