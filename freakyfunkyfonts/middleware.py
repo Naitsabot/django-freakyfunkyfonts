@@ -28,16 +28,30 @@ class FreakyFunkyFontsMiddleware:
 
         skip_tags = set(self.config["behaviour"]["skip_tags"])
         fonts = self.config["fonts"]["pool"]
+        scopes = self.config["behaviour"].get("scopes", ["all"])
 
-        for text_node in soup.find_all(string=True):
-            if text_node.parent.name in skip_tags:
-                continue
-            new_html = "".join(
-                f'<span style="font-family:{random.choice(fonts)}">{c}</span>'
-                if c.strip() else c
-                for c in text_node
-            )
-            text_node.replace_with(BeautifulSoup(new_html, "html.parser"))
+        # Determine roots to operate on
+        roots = []
+        if "all" in scopes:
+            roots = [soup]
+        else:
+            for scope in scopes:
+                if scope == "body" and soup.body:
+                    roots.append(soup.body)
+                else:
+                    roots.extend(soup.find_all(scope))
+
+        # Walk through text nodes under those roots
+        for root in roots:
+            for text_node in root.find_all(string=True):
+                if text_node.parent.name in skip_tags:
+                    continue
+                new_html = "".join(
+                    f'<span style="font-family:{random.choice(fonts)}">{c}</span>'
+                    if c.strip() else c
+                    for c in text_node
+                )
+                text_node.replace_with(BeautifulSoup(new_html, "html.parser"))
 
         response.content = str(soup)
         response["Content-Length"] = len(response.content)

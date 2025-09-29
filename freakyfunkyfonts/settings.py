@@ -10,6 +10,7 @@ DEFAULTS = {
     },
     "behaviour": {
         "skip_tags": ["script", "style", "noscript", "title"],
+        "scope": ["body", "main", "article"]
     },
 }
 

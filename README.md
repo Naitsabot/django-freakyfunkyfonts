@@ -55,6 +55,9 @@ tags = [
 ]
 
 [behaviour]
+# Scopes to operate on: "all" (If it should work on the whole html document), "body", or any tag names (article, main)
+scopes = ["body", "article", "main"]
+
 # HTML tags to skip completely
 skip_tags = ["script", "style", "noscript", "title"]
 ```
