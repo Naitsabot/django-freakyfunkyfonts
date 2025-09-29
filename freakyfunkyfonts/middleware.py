@@ -1,4 +1,4 @@
-from bs4 import BeautifulSoup, NavigableString
+from bs4 import BeautifulSoup, NavigableString, Comment
 import random
 from .settings import load_config
 
@@ -45,14 +45,14 @@ class FreakyFunkyFontsMiddleware:
 
         # Process text nodes
         for root in roots:
-            self._process_element(root, skip_tags, fonts)
+            self._process_element(root, skip_tags, fonts, soup)
 
         # Use decode() with formatter to preserve structure
         response.content = soup.encode(formatter="minimal")
         response["Content-Length"] = len(response.content)
         return response
 
-    def _process_element(self, element, skip_tags, fonts):
+    def _process_element(self, element, skip_tags, fonts, soup):
         """Recursively process element and its children"""
         # Skip if this tag should be ignored
         if hasattr(element, 'name') and element.name in skip_tags:
@@ -62,14 +62,15 @@ class FreakyFunkyFontsMiddleware:
         children = list(element.children) if hasattr(element, 'children') else []
         
         for child in children:
-            if isinstance(child, NavigableString) and not isinstance(child, type(child).__bases__[0]):
-                # This is a plain text node
-                if str(child).strip():  # Has non-whitespace content
+            if isinstance(child, NavigableString) and not isinstance(child, Comment):
+                # This is a plain text node (not a comment)
+                text = str(child)
+                if text.strip():  # Has non-whitespace content
                     new_elements = []
-                    for c in str(child):
+                    for c in text:
                         if c.strip():  # Character is not whitespace
                             font = random.choice(fonts)
-                            span = element.find_parent().new_tag("span") if element.find_parent() else BeautifulSoup().new_tag("span")
+                            span = soup.new_tag("span")
                             span['style'] = f"font-family:{font}"
                             span.string = c
                             new_elements.append(span)
@@ -83,4 +84,4 @@ class FreakyFunkyFontsMiddleware:
                     child.extract()
             elif hasattr(child, 'name'):
                 # Recurse into child tags
-                self._process_element(child, skip_tags, fonts)
+                self._process_element(child, skip_tags, fonts, soup)
