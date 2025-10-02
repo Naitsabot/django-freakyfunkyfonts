@@ -63,9 +63,11 @@ skip_tags = ['head', 'title', 'meta', 'link', 'style', 'script']
 
 [date_ranges]
 # List of date ranges with optional time ranges
+# You can use full dates (YYYY-MM-DD:YYYY-MM-DD) or year-agnostic month-day ranges (MM-DD:MM-DD)
 include = [
   { range = "2025-10-01:2025-10-10", temporal = ["08:00-18:00"] },
-  { range = "2025-12-24:2025-12-26", temporal = ["00:00-23:59"] }
+  { range = "2025-12-24:2025-12-26", temporal = ["00:00-23:59"] },
+  { range = "12-24:12-26", temporal = ["00:00-23:59"] } # applies every year
 ]
 exclude = [
   { range = "2025-12-31:2026-01-01", temporal = ["00:00-23:59"] }
@@ -74,6 +76,7 @@ exclude = [
 # The middleware will only apply during the included date/time ranges, and will be skipped during excluded ranges.
 # If no temporal is specified, the range applies for the whole day
 # If no ranges are defined, the middleware is always applied
+# You can use MM-DD:MM-DD for recurring yearly ranges.
 
 [paths]
 # URL path patterns (RegEx) to include or exclude

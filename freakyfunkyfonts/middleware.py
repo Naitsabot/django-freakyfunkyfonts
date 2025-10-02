@@ -48,13 +48,27 @@ class FreakyFunkyFontsMiddleware:
         date_ranges = self.config.get("date_ranges", {})
 
         def in_date_range(rng):
+            # Support both YYYY-MM-DD:YYYY-MM-DD and MM-DD:MM-DD
             start, end = rng.split(":")
-            start = datetime.date.fromisoformat(start)
-            end = datetime.date.fromisoformat(end)
-            if start <= end:
-                return start <= today <= end
+            if len(start) == 10 and len(end) == 10:
+                # Full date format
+                start_date = datetime.date.fromisoformat(start)
+                end_date = datetime.date.fromisoformat(end)
+                if start_date <= end_date:
+                    return start_date <= today <= end_date
+                else:
+                    return today >= start_date or today <= end_date
+            elif len(start) == 5 and len(end) == 5:
+                # Month-day format, year-agnostic
+                start_md = tuple(map(int, start.split("-")))
+                end_md = tuple(map(int, end.split("-")))
+                today_md = (today.month, today.day)
+                if start_md <= end_md:
+                    return start_md <= today_md <= end_md
+                else:
+                    return today_md >= start_md or today_md <= end_md
             else:
-                return today >= start or today <= end
+                return False
 
         def in_time_range(rng):
             start, end = rng.split("-")
