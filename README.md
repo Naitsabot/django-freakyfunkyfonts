@@ -60,6 +60,19 @@ scopes = ["body", "article", "main"]
 
 # HTML tags to skip completely
 skip_tags = ['head', 'title', 'meta', 'link', 'style', 'script'] 
+
+[date_ranges]
+# List of date ranges with optional time ranges
+include = [
+  { range = "2025-10-01:2025-10-10", temporal = ["08:00-18:00"] },
+  { range = "2025-12-24:2025-12-26", temporal = ["00:00-23:59"] }
+]
+exclude = [
+  { range = "2025-12-31:2026-01-01", temporal = ["00:00-23:59"] }
+]
+
+# The middleware will only apply during the included date/time ranges, and will be skipped during excluded ranges.
+# If no temporal is specified, the range applies for the whole day.
 ```
 
 ## Dev

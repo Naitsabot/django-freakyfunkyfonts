@@ -3,6 +3,7 @@ import random
 import datetime
 from .settings import load_config
 
+
 class FreakyFunkyFontsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -29,6 +30,7 @@ class FreakyFunkyFontsMiddleware:
         today = datetime.date.today()
         now = datetime.datetime.now().time()
         date_ranges = self.config.get("date_ranges", {})
+
         def in_date_range(rng):
             start, end = rng.split(":")
             start = datetime.date.fromisoformat(start)
@@ -37,6 +39,7 @@ class FreakyFunkyFontsMiddleware:
                 return start <= today <= end
             else:
                 return today >= start or today <= end
+
         def in_time_range(rng):
             start, end = rng.split("-")
             start = datetime.time(*map(int, start.split(":")))
