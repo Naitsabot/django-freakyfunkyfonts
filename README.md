@@ -76,9 +76,9 @@ exclude = [
 # If no ranges are defined, the middleware is always applied
 
 [paths]
-# URL path patterns to include or exclude
-include = ["/^/funky/", "/^/blog/"]
-exclude = ["/^/admin/", "/^/api/"]
+# URL path patterns (RegEx) to include or exclude
+include = ["^/funky/", "^/blog/"]
+exclude = ["^/admin/", "^/api/"]
 
 # The middleware will only apply to included paths and will be skipped for excluded paths.
 # If no paths are defined, the middleware is applied to all URLs.
