@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "django-freakyfunkyfonts"
 description = "Django middleware for when you want your fonts to get freaky."
-version = "1.2.1"
+version = "1.2.2"
 readme = "README.md"
 license = "MIT"
 authors = [
