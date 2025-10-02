@@ -73,6 +73,7 @@ exclude = [
 
 # The middleware will only apply during the included date/time ranges, and will be skipped during excluded ranges.
 # If no temporal is specified, the range applies for the whole day.
+# If no ranges are defined, the middleware is always applied
 ```
 
 ## Dev

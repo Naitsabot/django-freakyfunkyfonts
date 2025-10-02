@@ -12,24 +12,12 @@ DEFAULTS = {
         "skip_tags": ['head', 'title', 'meta', 'link', 'style', 'script'],
         "scope": ["body", "main", "article"]
     },
-    "date_ranges": {
-        #"include": [
-        #    {"range": "2025-10-01:2025-10-10", "temporal": ["08:00-18:00"]},
-        #    {"range": "2025-12-24:2025-12-26", "temporal": ["00:00-23:59"]}
-        #],
-        #"exclude": [
-        #    {"range": "2025-12-31:2026-01-01", "temporal": ["00:00-23:59"]}
-        #]
-    },
+    "date_ranges": None
 }
 
 def load_config():
     path = os.path.join(os.getcwd(), "freakyfunkyfonts.toml")
-    config = DEFAULTS.copy()
     if os.path.exists(path):
         with open(path, "rb") as f:
-            user_conf = tomllib.load(f)
-            # deep merge
-            for section, values in user_conf.items():
-                config[section].update(values)
-    return config
+            return tomllib.load(f)
+    return DEFAULTS.copy()
