@@ -64,6 +64,8 @@ skip_tags = ['head', 'title', 'meta', 'link', 'style', 'script']
 [date_ranges]
 # List of date ranges with optional time ranges
 # You can use full dates (YYYY-MM-DD:YYYY-MM-DD) or year-agnostic month-day ranges (MM-DD:MM-DD)
+# A range "2025-12-24:2025-12-26" will apply on December 24, 25, and 26. 
+# The same applies to month-day ranges like "12-24:12-26".
 include = [
   { range = "2025-10-01:2025-10-10", temporal = ["08:00-18:00"] },
   { range = "2025-12-24:2025-12-26", temporal = ["00:00-23:59"] },

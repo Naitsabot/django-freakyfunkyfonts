@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "django-freakyfunkyfonts"
 description = "Django middleware for when you want your fonts to get freaky."
-version = "1.4.0"
+version = "1.4.1"
 readme = "README.md"
 license = "MIT"
 authors = [
@@ -27,7 +27,7 @@ dependencies = [
   "beautifulsoup4>=4.13.5",
 ]
 
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 
 [tool.setuptools]
 packages = ["freakyfunkyfonts"]
