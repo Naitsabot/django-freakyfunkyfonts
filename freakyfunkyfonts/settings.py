@@ -12,6 +12,14 @@ DEFAULTS = {
         "skip_tags": ['head', 'title', 'meta', 'link', 'style', 'script'],
         "scope": ["body", "main", "article"]
     },
+    "temporal_ranges": {
+        "include": [],  # e.g. ["08:00-18:00"]
+        "exclude": []  # e.g. ["23:00-01:00"]
+    },
+    "date_ranges": {
+        "include": [],  # e.g. [{"range": "2025-10-01:2025-10-10", "temporal": ["08:00-18:00"]}]
+        "exclude": []  # e.g. [{"range": "2025-12-24:2025-12-26", "temporal": ["00:00-23:59"]}]
+    },
 }
 
 def load_config():
