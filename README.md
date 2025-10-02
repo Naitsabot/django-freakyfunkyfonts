@@ -6,13 +6,13 @@ For when you feel the funk that freaks you fonts
 
 Freaky Funky Fonts Middleware is essentially a Django “font chaos” middleware package with configurable behaviour.
 
-It intercespts the html of Djangos reponses
+It intercespts the html of Djangos reponses, and applies random fonts to each and every peice of text in html documents.
 
 ## Usage
 
-- Install the package
-- Apply the middleare in your Django project settings as middleare
-- (Optional but recommended) Configure in your `freakyfunkyfonts.toml` (or `.ini` for versions before python 3.11)
+- Install the package.
+- Apply the middleare in your Django project settings as middleware.
+- (Optional but recommended) Configure in your `freakyfunkyfonts.toml` (or `.ini` for versions before python 3.11).
 
 
 ### Installing
@@ -38,7 +38,7 @@ Example:
 
 ```toml
 [fonts]
-# List of fonts to cycle through
+# List of fonts to randomly pick from
 pool = [
   "Times New Roman",
   "Georgia",
@@ -72,7 +72,7 @@ exclude = [
 ]
 
 # The middleware will only apply during the included date/time ranges, and will be skipped during excluded ranges.
-# If no temporal is specified, the range applies for the whole day.
+# If no temporal is specified, the range applies for the whole day
 # If no ranges are defined, the middleware is always applied
 ```
 
