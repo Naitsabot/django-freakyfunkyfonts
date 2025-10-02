@@ -13,7 +13,11 @@ DEFAULTS = {
         "skip_tags": ['head', 'title', 'meta', 'link', 'style', 'script'],
         "scope": ["body", "main", "article"]
     },
-    "date_ranges": None
+    "date_ranges": None,
+    "paths": {
+        "include": [],  # e.g. ["/^/funky/", "/^/blog/"]
+        "exclude": ["/^/admin/", "/^/api/"]
+    }
 }
 
 def load_config():

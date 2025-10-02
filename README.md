@@ -74,6 +74,14 @@ exclude = [
 # The middleware will only apply during the included date/time ranges, and will be skipped during excluded ranges.
 # If no temporal is specified, the range applies for the whole day
 # If no ranges are defined, the middleware is always applied
+
+[paths]
+# URL path patterns to include or exclude
+include = ["/^/funky/", "/^/blog/"]
+exclude = ["/^/admin/", "/^/api/"]
+
+# The middleware will only apply to included paths and will be skipped for excluded paths.
+# If no paths are defined, the middleware is applied to all URLs.
 ```
 
 ## Dev

@@ -14,6 +14,8 @@ class FreakyFunkyFontsMiddleware:
         return self.process_response(request, response)
 
     def process_response(self, request, response):
+        if not self.should_apply_to_path(request.path):
+            return response
         if not self.should_apply_middleware():
             return response
         if not self.is_html_response(response):
@@ -24,6 +26,20 @@ class FreakyFunkyFontsMiddleware:
         response.content = soup.encode(formatter="minimal")
         response["Content-Length"] = len(response.content)
         return response
+
+    def should_apply_to_path(self, path):
+        import re
+        paths = self.config.get("paths", {})
+        excludes = paths.get("exclude", []) if paths else []
+        includes = paths.get("include", []) if paths else []
+        # Exclude logic
+        for pattern in excludes:
+            if re.match(pattern, path):
+                return False
+        # Include logic
+        if includes:
+            return any(re.match(pattern, path) for pattern in includes)
+        return True
 
     def should_apply_middleware(self):
         """Handle date and time range logic"""
